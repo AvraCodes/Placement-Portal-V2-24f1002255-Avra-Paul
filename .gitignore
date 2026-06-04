@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.venv
+.env
+.flaskenv
+
+# SQLite Databases
+*.db
+instance/
+
+# Celery Beat schedules
+celerybeat-schedule*
+
+# Local Generated Data
+mails/
+static/exports/*.csv
+
+# Browser Cookies/Debug Files
+cookies.txt
+cookies_student.txt
+.DS_Store
