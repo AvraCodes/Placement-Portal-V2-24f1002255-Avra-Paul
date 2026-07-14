@@ -40,46 +40,8 @@ var CompanyPage = {
     async loadProfile() {
       try { this.profile = await companyGetProfile(); } catch(e) {}
     },
-
     async loadDrives() {
-      try {
-        this.drives = await companyGetDrives();
-        this.renderChart();
-      } catch(e) {}
-    },
-    renderChart() {
-      this.$nextTick(() => {
-        var ctx = document.getElementById('companyChart');
-        if (!ctx) return;
-        if (window.myCompanyChart) {
-          window.myCompanyChart.destroy();
-        }
-        var labels = this.drives.map(function(d) { return d.drive_name; });
-        var counts = this.drives.map(function(d) { return d.application_count || 0; });
-        window.myCompanyChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Number of Applicants',
-              data: counts,
-              backgroundColor: 'rgba(13, 110, 253, 0.7)',
-              borderColor: '#0d6efd',
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: { stepSize: 1 }
-              }
-            }
-          }
-        });
-      });
+      try { this.drives = await companyGetDrives(); } catch(e) {}
     },
 
     // Save updated profile
@@ -295,16 +257,8 @@ var CompanyPage = {
               </tbody>
             </table>
           </div>
-
-          <!-- Chart.js Analytics Panel -->
-          <div class="card mt-4" v-if="drives.length">
-            <div class="card-header bg-white fw-bold"><i class="bi bi-bar-chart-line-fill me-1"></i>Applicants per Placement Drive</div>
-            <div class="card-body" style="position: relative; height: 300px;">
-              <canvas id="companyChart"></canvas>
-            </div>
-          </div>
-
         </div>
+
         <!-- ===== APPLICANTS TAB ===== -->
         <div v-if="tab === 'applicants'">
           <h5 class="mb-3">View Applicants</h5>

@@ -41,58 +41,8 @@ var AdminPage = {
     },
 
     async loadOverview() {
-      try {
-        this.stats = await adminDashboard();
-        this.renderChart();
-      } catch(e) {}
+      try { this.stats = await adminDashboard(); } catch(e) {}
     },
-    renderChart() {
-      this.$nextTick(() => {
-        var ctx = document.getElementById('adminChart');
-        if (!ctx) return;
-        if (window.myAdminChart) {
-          window.myAdminChart.destroy();
-        }
-        window.myAdminChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Students', 'Companies', 'Drives', 'Applications', 'Selected'],
-            datasets: [{
-              label: 'Count',
-              data: [
-                this.stats.total_students || 0,
-                this.stats.total_companies || 0,
-                this.stats.total_drives || 0,
-                this.stats.total_applications || 0,
-                this.stats.selected_students || 0
-              ],
-              backgroundColor: [
-                'rgba(13, 110, 253, 0.7)',
-                'rgba(25, 135, 84, 0.7)',
-                'rgba(255, 193, 7, 0.7)',
-                'rgba(13, 202, 240, 0.7)',
-                'rgba(220, 53, 69, 0.7)'
-              ],
-              borderColor: [
-                '#0d6efd', '#198754', '#ffc107', '#0dcaf0', '#dc3545'
-              ],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: { stepSize: 1 }
-              }
-            }
-          }
-        });
-      });
-    },
-
     async loadCompanies() {
       try { this.companies = await adminGetCompanies(); } catch(e) {}
     },
@@ -220,23 +170,13 @@ var AdminPage = {
                 <div class="text-muted small">Selected Students</div>
               </div>
             </div>
-
             <div class="col-6 col-md-3">
-              <div class="card text-center p-3 border-success">
+              <div class="card text-center p-3">
                 <div class="fs-2 fw-bold text-success">{{ stats.approved_drives || 0 }}</div>
                 <div class="text-muted small">Approved Drives</div>
               </div>
             </div>
           </div>
-
-          <!-- Chart.js Analytics Panel -->
-          <div class="card mt-4">
-            <div class="card-header bg-white fw-bold"><i class="bi bi-bar-chart-line-fill me-1"></i>Portal Analytics</div>
-            <div class="card-body" style="position: relative; height: 350px;">
-              <canvas id="adminChart"></canvas>
-            </div>
-          </div>
-
         </div>
 
         <!-- ===== COMPANIES TAB ===== -->

@@ -121,41 +121,25 @@ def list_drives():
     p = user.student_profile
 
     search = request.args.get('search', '').strip()
-
-    drives_list = None
-    if _cache:
-        drives_list = _cache.get('approved_drives_raw')
-
-    if not drives_list:
-        query = PlacementDrive.query.filter_by(status='approved')
-        drives = query.all()
-        drives_list = [d.to_dict() for d in drives]
-        if _cache:
-            _cache.set('approved_drives_raw', drives_list, timeout=60)
-
+    query = PlacementDrive.query.filter_by(status='approved')
     if search:
-        s = search.lower()
-        drives_list = [
-            d for d in drives_list
-            if s in (d.get('drive_name') or '').lower()
-            or s in (d.get('job_title') or '').lower()
-            or s in (d.get('location') or '').lower()
-        ]
+        query = query.filter(
+            db.or_(
+                PlacementDrive.drive_name.ilike(f'%{search}%'),
+                PlacementDrive.job_title.ilike(f'%{search}%'),
+                PlacementDrive.location.ilike(f'%{search}%')
+            )
+        )
 
-    class SimpleDrive:
-        def __init__(self, d):
-            self.eligibility_branch = d.get('eligibility_branch')
-            self.eligibility_cgpa = d.get('eligibility_cgpa')
-            self.eligibility_year = d.get('eligibility_year')
-
+    drives = query.all()
     result = []
-    for d in drives_list:
-        dd = dict(d)
+    for d in drives:
+        dd = d.to_dict()
         if p:
-            is_elig, reason = check_eligibility(p, SimpleDrive(dd))
+            is_elig, reason = check_eligibility(p, d)
             dd['is_eligible'] = is_elig
             dd['eligibility_reason'] = reason
-            existing = Application.query.filter_by(student_id=p.id, drive_id=dd['id']).first()
+            existing = Application.query.filter_by(student_id=p.id, drive_id=d.id).first()
             dd['already_applied'] = existing is not None
             dd['application_status'] = existing.status if existing else None
         else:
