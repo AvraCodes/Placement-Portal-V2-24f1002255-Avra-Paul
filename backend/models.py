@@ -183,6 +183,7 @@ class Application(db.Model):
             'student_branch': self.student.branch if self.student else None,
             'student_cgpa': self.student.cgpa if self.student else None,
             'student_email': self.student.user.email if self.student and self.student.user else None,
+            'resume_path': self.student.resume_path if self.student else None,
             'drive_name': self.drive.drive_name if self.drive else None,
             'job_title': self.drive.job_title if self.drive else None,
             'company_name': self.drive.company.company_name if self.drive and self.drive.company else None,

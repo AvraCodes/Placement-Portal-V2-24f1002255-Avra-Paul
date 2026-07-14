@@ -322,7 +322,7 @@ var CompanyPage = {
           <div class="table-responsive">
             <table class="table table-bordered table-sm" v-if="applicants.length">
               <thead class="table-light">
-                <tr><th>Student</th><th>Branch</th><th>CGPA</th><th>Email</th><th>Applied</th><th>Status</th><th>Actions</th></tr>
+                <tr><th>Student</th><th>Branch</th><th>CGPA</th><th>Email</th><th>Applied</th><th>Resume</th><th>Status</th><th>Actions</th></tr>
               </thead>
               <tbody>
                 <tr v-for="a in applicants" :key="a.id">
@@ -331,6 +331,12 @@ var CompanyPage = {
                   <td>{{ a.student_cgpa }}</td>
                   <td>{{ a.student_email }}</td>
                   <td>{{ fmtDate(a.application_date) }}</td>
+                  <td>
+                    <a v-if="a.resume_path" :href="'/api/student/resume/' + a.student_id" target="_blank" class="btn btn-xs btn-sm btn-outline-primary py-0">
+                      <i class="bi bi-file-earmark-pdf me-1"></i>View
+                    </a>
+                    <span v-else class="text-muted small">No Resume</span>
+                  </td>
                   <td><span :class="statusClass(a.status)">{{ a.status }}</span></td>
                   <td class="text-nowrap">
                     <button class="btn btn-xs btn-sm btn-outline-info me-1"    @click="updateStatus(a.id, 'shortlisted')">Shortlist</button>
