@@ -120,13 +120,16 @@ var CompanyPage = {
         this.loading = false;
       }
     },
-
     // Load applicants for a selected drive
     async loadApplicants() {
       if (!this.selectedDriveId) return;
-      try { this.applicants = await companyGetApplicants(this.selectedDriveId); } catch(e) {}
+      try {
+        var res = await companyGetApplicants(this.selectedDriveId);
+        this.applicants = res.applications || [];
+      } catch(e) {
+        this.applicants = [];
+      }
     },
-
     // Update application status (shortlist / select / reject)
     async updateStatus(appId, status) {
       try {
