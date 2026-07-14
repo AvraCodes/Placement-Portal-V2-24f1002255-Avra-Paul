@@ -13,12 +13,12 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'ppa.db')
     # Track modifications is disabled to reduce overhead and improve performance.
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
     # JWT configuration: Used to sign access tokens for secure client-server API requests.
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'ppa-jwt-secret-2024')
     # Access token valid for 24 hours (defined in seconds).
     JWT_ACCESS_TOKEN_EXPIRES = 86400
-
+    # Enable reading tokens from headers and query parameters (for direct file links).
+    JWT_TOKEN_LOCATION = ['headers', 'query_string']
     # Flask-Caching via Redis: stores temporary cache entries on database 0 of Redis.
     CACHE_TYPE = 'RedisCache'
     CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL', 'redis://localhost:6379/0')

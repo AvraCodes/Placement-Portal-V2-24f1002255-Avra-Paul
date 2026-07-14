@@ -180,6 +180,8 @@ def apply(did):
     p = user.student_profile
     if not p:
         return jsonify({'error': 'Complete your profile before applying'}), 400
+    if not p.resume_path:
+        return jsonify({'error': 'You must upload your resume before applying'}), 400
 
     drive = db.session.get(PlacementDrive, did)
     if not drive:

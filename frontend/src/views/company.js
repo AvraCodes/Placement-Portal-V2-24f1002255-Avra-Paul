@@ -332,7 +332,7 @@ var CompanyPage = {
                   <td>{{ a.student_email }}</td>
                   <td>{{ fmtDate(a.application_date) }}</td>
                   <td>
-                    <a v-if="a.resume_path" :href="'/api/student/resume/' + a.student_id" target="_blank" class="btn btn-xs btn-sm btn-outline-primary py-0">
+                    <a v-if="a.resume_path" :href="'/api/student/resume/' + a.student_id + '?jwt=' + store.token" target="_blank" class="btn btn-xs btn-sm btn-outline-primary py-0">
                       <i class="bi bi-file-earmark-pdf me-1"></i>View
                     </a>
                     <span v-else class="text-muted small">No Resume</span>
